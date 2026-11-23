@@ -1,0 +1,21 @@
+# project-preset gate in CI: the same checks as the local hook, but unskippable.
+# Installed only with install --with-ci. Owned by the project after that; edit freely.
+name: preset-gate
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: preset health
+        run: bash .agents/bin/doctor.sh --ci   # --ci: hooksPath is local config, absent on runners
+      - name: repository gate
+        run: bash .agents/bin/precheck.sh --all

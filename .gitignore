@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Agent / Tooling local caches
+.claude
+
+# OS Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+tmp/
+temp/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PROJECT PROFILE — what this project is. Owned by the project, never overwritten by the installer.
+  Fill it at the PRESET stage (skill: project-setup) from evidence, not from hopes.
+  Leave a value empty if unknown and list it under cannot_see; never guess.
+  Axis meanings: sh .agents/bin/slice.sh get profile_schema
+
+  The gate in final mode (precheck.sh, option "final") runs every non-empty <command> below
+  and reports its real exit code. Commands run from the repository root through sh; keep each
+  on one line, and escape XML characters (write &amp;&amp; for two ampersands).
+-->
+<project_profile status="UNFILLED" updated="">
+
+  <archetype primary="" secondary=""/>
+  <purpose></purpose>
+  <maturity></maturity>                 <!-- SPIKE PROTOTYPE PREVIEW STABLE MATURE DORMANT -->
+  <risk_class></risk_class>             <!-- LOW MEDIUM HIGH -->
+  <distribution></distribution>         <!-- SOURCE_ONLY PACKAGE_REGISTRY CONTAINER BINARY HOSTED_SERVICE MODEL_OR_DATASET SPEC_OR_SCHEMA TEMPLATE INTERNAL -->
+  <visibility></visibility>             <!-- PRIVATE INTERNAL PUBLIC_SOURCE OPEN_SOURCE ; OPEN_SOURCE activates the oss module -->
+  <contribution_model></contribution_model>
+  <deadline></deadline>
+  <priorities></priorities>             <!-- e.g. correctness > evidence > security > UI polish ; or: rich UI in scope -->
+  <memory_cadence>MILESTONE</memory_cadence>   <!-- MILESTONE or EVERY_TASK (gate then warns on code commits without a triad change) -->
+  <observability>TRACED</observability>        <!-- TRACED (default) or BASIC (one-file scripts, as a recorded decision) -->
+  <response_style>OPTIONS</response_style>     <!-- OPTIONS: decisions as numbered choices (prime directive P4) -->
+
+  <stack></stack>
+  <entry_points></entry_points>
+  <primary_user_path></primary_user_path>
+  <trust_boundaries></trust_boundaries>
+  <external_dependencies></external_dependencies>
+  <constraints></constraints>
+
+  <commands>
+    <command id="setup"></command>
+    <command id="preflight"></command>
+    <command id="lint"></command>
+    <command id="test"></command>
+    <command id="build"></command>
+    <command id="smoke"></command>
+  </commands>
+
+  <cannot_see></cannot_see>
+</project_profile>

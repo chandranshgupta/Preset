@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<matt_pocock_core version="1.0" precedence="subordinate to PROJECT.xml prime directives P1-P9 and laws L01-L20">
+
+  <purpose>
+    Bind Matt Pocock's composable AI engineering workflows as phase-bound execution plugins inside
+    project-preset's constitutional XML control plane. Strategic architecture, ubiquitous vocabulary
+    and deterministic guardrails stay human-curated; tactical vertical slices execute inside isolated
+    150k-token Smart Zones.
+  </purpose>
+
+  <workflow_chain>
+    <phase n="1" id="GRILL" skill="grill-with-docs" session="session-1" session_policy="NEVER /clear before phase 2">
+      Walk the design tree in rounds with numbered options (P4). Delegate factual codebase questions
+      to read-only sub-agents. Update GLOSSARY.md inline as terms settle (THR-44) and record Three-Gate
+      ADRs in docs/adr/ (THR-45). For multi-session initiatives, map decision tickets via /wayfinder first.
+    </phase>
+    <phase n="2" id="SPEC" skill="to-spec" session="session-1" session_policy="MUST run in the exact same conversation as GRILL">
+      Synthesize settled decisions without re-interviewing. Lock module seams, user stories, negative
+      constraints, numeric defaults and testing seams. Audit the generated Spec line-by-line against
+      grilling answers so strict rules are never softened into vague prose.
+    </phase>
+    <phase n="3" id="TICKETS" skill="to-tickets" session="fresh-session" session_policy="Start clean session reading published Spec">
+      Decompose the Spec into vertical tracer-bullet tickets scoped to fit cleanly inside a single
+      150,000-token Smart Zone, with explicit blocked-by edges.
+    </phase>
+    <phase n="4" id="IMPLEMENT" skill="implement-spec" session="isolated-worktrees" session_policy="One fresh sub-agent + git worktree per ready ticket">
+      Execute vertical slices via /tdd (red -> green -> refactor) against pre-agreed module seams,
+      using exact GLOSSARY.md names and CODING_STANDARDS.md rules. Small single-session tasks use /implement directly.
+    </phase>
+    <phase n="5" id="REVIEW_PR" skill="code-review" session="integration-branch" session_policy="Parallel independent reviewers + /pr + precheck.sh --final">
+      Spawn isolated Spec Reviewer, Standards Reviewer and (when touching auth/data/public APIs)
+      Security Reviewer. Run sh .agents/bin/precheck.sh --final, then format PR via /pr with visual
+      summary, runtime evidence and Merge Danger rating (FIN-16).
+    </phase>
+    <phase n="6" id="RETRO" skill="retro" session="post-pr" session_policy="After review or every ~5 automated PRs">
+      Convert recurring review findings into deterministic compiler flags, lint rules or fast seam tests
+      first (L12); update CODING_STANDARDS.md only when static or runtime enforcement is impossible.
+    </phase>
+  </workflow_chain>
+
+  <merge_danger_matrix>
+    <tier door="TWO_WAY" blast_radius="SMALL" policy="Sampled human review (e.g. 1 in 5 PRs) after CI, code-review and precheck.sh --final pass." />
+    <tier door="TWO_WAY" blast_radius="LARGE" policy="Human architectural diff and runtime evidence inspection before merge." />
+    <tier door="ONE_WAY" blast_radius="ANY" policy="Mandatory deep human review, security review and explicit sign-off (L08/L09) — covers schema migrations, auth/permissions, billing, external emails and destructive ops." />
+  </merge_danger_matrix>
+
+</matt_pocock_core>

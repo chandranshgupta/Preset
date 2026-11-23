@@ -1,0 +1,38 @@
+name: Daily Architecture Improvement Cron
+
+on:
+  schedule:
+    # Runs daily at 02:00 UTC
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  improve-architecture:
+    name: Survey Hotspots & Propose Deep-Module Refactoring
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies & Claude Code
+        run: |
+          npm ci
+          npm install -g @anthropic-ai/claude-code
+
+      - name: Run /improve-codebase-architecture and open Two-Way-Door PR
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="chore/arch-deepen-$(date +%Y%m%d)"
+          git checkout -b "$BRANCH"
+          claude -p "Run /improve-codebase-architecture on recent commits. Pick the single highest-value two-way-door deep-module refactoring candidate, implement it with seam tests, run /code-review, and if all checks pass, commit and open a PR using the /pr skill format." --allowedTools "Bash,Read,Write,Edit,Glob,Grep"

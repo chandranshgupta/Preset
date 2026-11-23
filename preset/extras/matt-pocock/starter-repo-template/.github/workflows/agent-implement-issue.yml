@@ -1,0 +1,38 @@
+name: Autonomous Agent Issue Implementation
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  implement-issue:
+    if: github.event.label.name == 'ready-for-agent'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies & Claude Code
+        run: |
+          npm ci
+          npm install -g @anthropic-ai/claude-code
+
+      - name: Implement Ticket via TDD + Code Review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          BRANCH="feat/issue-${ISSUE_NUMBER}"
+          git checkout -b "$BRANCH"
+          claude -p "Read AGENTS.md, GLOSSARY.md, CODING_STANDARDS.md, and docs/adr/. Implement GitHub Issue #${ISSUE_NUMBER} (${ISSUE_TITLE}): ${ISSUE_BODY}. Follow /tdd at agreed seams, run /code-review, verify all checks pass, push branch ${BRANCH}, and open a PR formatted with /pr." --allowedTools "Bash,Read,Write,Edit,Glob,Grep"

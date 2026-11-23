@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<matt_pocock_directive version="1.0">
+
+  <rules>
+    <rule id="MP-01" stage="PRESET" skill="setup-matt-pocock-skills">Run /setup-matt-pocock-skills once per repo to bind issue tracker, ready-for-agent triage label and GLOSSARY.md vs GLOSSARY-MAP.md layout.</rule>
+    <rule id="MP-02" stage="THROUGHOUT" skill="grilling">Separate facts from decisions: dispatch read-only sub-agents to inspect files; ask the user only true product or architectural decisions with a recommended default (P4).</rule>
+    <rule id="MP-03" stage="THROUGHOUT" skill="domain-modeling">Write settled domain terms to GLOSSARY.md immediately inline — pure vocabulary only, never SQL/TypeScript schemas or spec paragraphs.</rule>
+    <rule id="MP-04" stage="THROUGHOUT" skill="domain-modeling">Create docs/adr/NNNN-slug.md only when all 3 gates pass: (1) hard to reverse, (2) surprising without context, (3) real trade-off. Index every ADR in DECISION.md.</rule>
+    <rule id="MP-05" stage="THROUGHOUT" skill="to-spec">Never run /clear between /grill-with-docs and /to-spec; verify numeric defaults, ordering guarantees and negative requirements verbatim before publishing the Spec.</rule>
+    <rule id="MP-06" stage="THROUGHOUT" skill="to-tickets">Slice Specs into vertical end-to-end tracer bullets under 150k tokens each, never horizontal DB-only or UI-only layers.</rule>
+    <rule id="MP-07" stage="THROUGHOUT" skill="implement-spec">Run parallel frontier tickets inside isolated Git worktrees (using-git-worktrees) with fresh context windows so no sub-agent crosses into the Dumb Zone.</rule>
+    <rule id="MP-08" stage="THROUGHOUT" skill="tdd">Write unit and integration tests against the highest clean public seam of a deep module; never couple tests to private helpers or internal constants.</rule>
+    <rule id="MP-09" stage="THROUGHOUT" skill="codebase-design">Prefer deep modules (substantial functionality behind a narrow typed interface with high locality) over fragmented shallow wrappers.</rule>
+    <rule id="MP-10" stage="THROUGHOUT" skill="improve-codebase-architecture">Run /improve-codebase-architecture periodically on high-churn Git hotspots, inspect the HTML Before/After report, and feed chosen candidates through /to-spec.</rule>
+    <rule id="MP-11" stage="THROUGHOUT" skill="diagnosing-bugs">Follow red-reproduction -> minimize -> hypothesize -> instrument (trace_kit P9) -> root-cause fix -> permanent seam regression test.</rule>
+    <rule id="MP-12" stage="FINAL_CHECK" skill="code-review">Run Spec Reviewer and Standards Reviewer as separate parallel sub-agents (plus Security Reviewer for multi-user, auth, payment or public paths).</rule>
+    <rule id="MP-13" stage="FINAL_CHECK" skill="pr">Include visual summary, runtime execution trace/screenshot evidence, and explicit One-Way vs Two-Way Door + Blast Radius classification in every PR.</rule>
+    <rule id="MP-14" stage="FINAL_CHECK" skill="retro">Ratchet review lessons into compiler flags, strict linter rules or seam tests first; prose rules in CODING_STANDARDS.md are the last resort.</rule>
+    <rule id="MP-15" stage="THROUGHOUT" skill="writing-for-agents">Default coding model reasoning effort to medium for exploration/grilling/implementation to avoid premature token bloat; escalate to high only for live QA, security audits or hard bugs.</rule>
+    <rule id="MP-16" stage="FINAL_CHECK" skill="pr">Never spend agent tokens SSHing to deploy; trigger deterministic CI/CD pipelines on merge to main.</rule>
+  </rules>
+
+  <troubleshooting>
+    <item id="MP-BUG-01" symptom="/grill-with-docs asks all questions at once without updating GLOSSARY.md">Verify both grilling and domain-modeling skills exist in .agents/skills/ and ask the agent which skills it loaded.</item>
+    <item id="MP-BUG-02" symptom="GLOSSARY.md or docs/adr/ not written during grilling">Invoke /grill-with-docs directly in the root repo session rather than nested inside an external wrapper pipeline.</item>
+    <item id="MP-BUG-03" symptom="Spec softens strict constraints from grilling">Confirm /clear was not invoked before /to-spec and audit the Spec line-by-line against settled grilling answers.</item>
+  </troubleshooting>
+
+</matt_pocock_directive>

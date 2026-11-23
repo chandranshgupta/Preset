@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  OPEN-SOURCE EXCELLENCE — CORE DIRECTIVE (the oss module of the project standard)
+  Lives at .agents/modules/oss/CORE.xml. Load it in full whenever the oss module triggers
+  (project is or will be public, or open-source readiness is asked for).
+  Companion to DIRECTIVE.xml in the same folder, which holds the full rule body,
+  templates, catalog and glossary. This file holds the procedure and the decision
+  structure: profile -> verify -> evaluate -> prioritize -> what-if -> act -> report.
+  Load the full directive only one section at a time:
+    sh .agents/bin/slice.sh -f oss list | get <section> | get <ID>
+  Everyday laws, lifecycle and the final-check gate live in .agents/PROJECT.xml; nothing here
+  weakens them. No project names anywhere: everything is archetype + condition + evidence.
+-->
+<oss_core version="1.0" applies_to="any-git-repository" audience="ai-coding-agent">
+
+  <mission>
+    Make this repository understandable, runnable, verifiable, reusable and maintainable by
+    someone other than its author — and prove it with evidence rather than claims.
+    Improve in proportion to the project's archetype, maturity and risk. Never apply a fixed
+    checklist to a project it does not fit.
+  </mission>
+
+  <modes>
+    <mode id="AUDIT" default="true">Read-only. Profile, gates, score, findings, ranked what-ifs, owner actions. Change nothing.</mode>
+    <mode id="IMPROVE">Implement the highest-leverage gaps in small verified units. Preserve strengths.</mode>
+    <mode id="RELEASE_PREP">Freeze scope, clear gates, prove the documented path on a clean machine, sync claims, snapshot the state.</mode>
+    <mode id="BOOTSTRAP">New or empty repository: licence, README, ignore rules, manifest plus lockfile, one passing test, one green run.</mode>
+  </modes>
+
+  <laws>
+    <law n="1">Inspect before mutating.</law>
+    <law n="2">Never fabricate results, counts, statuses, links or contacts.</law>
+    <law n="3">Never report an unexecuted check as passed; write UNVERIFIED and why.</law>
+    <law n="4">Never commit or quote a secret; report location and recommend rotation.</law>
+    <law n="5">Never copy a file, badge or template that solves no named problem here.</law>
+    <law n="6">Never weaken, skip or silence a check to reach green.</law>
+    <law n="7">Preserve working behaviour and existing conventions.</law>
+    <law n="8">Respect the licence of all code, data, models, fonts and snippets.</law>
+    <law n="9">State limitations in every report.</law>
+    <law n="10">Match effort to the project's size, type and risk.</law>
+  </laws>
+
+  <labels>
+    Evidence: F fact | I interpretation | H hypothesis | U unknown | R recommendation.
+    Status: DONE | GAP | NA (with reason) | UNVERIFIED.
+  </labels>
+
+  <!-- ================= PROCEDURE ================= -->
+
+  <step n="1" id="PROFILE">
+    Establish, from files and not from the README's self-description:
+    archetype (primary and secondary) · purpose and primary user path · stack and entry points ·
+    maturity (SPIKE, PROTOTYPE, PREVIEW, STABLE, MATURE, DORMANT) · risk class (LOW, MEDIUM, HIGH) ·
+    distribution (source, registry, container, binary, hosted, model, spec, template) ·
+    contribution model · external dependencies (accounts, keys, GPUs, datasets) · constraints
+    (offline, regulated data, platform, budget) · what you cannot see.
+    Judgement is forbidden until this is written down.
+  </step>
+
+  <step n="2" id="VERIFY">
+    For every quality claim, decide which level it reaches — and never collapse the levels:
+    1 EXISTS (code present) · 2 CONFIGURED (a command or job would run it) ·
+    3 RAN (a record shows execution on a specific state) · 4 PASSED (observed success, with counts) ·
+    5 MEANINGFUL (assertions would catch a regression in the riskiest behaviours).
+    Then audit claims: every number, status word, path, flag, endpoint and contact must resolve
+    to something real. Run the documented setup in a clean environment if possible and record the
+    exact command, exit status and first failure text. Separate offline checks from those needing
+    credentials, models or hardware, and mark the latter.
+  </step>
+
+  <step n="3" id="EVALUATE">
+    <gates note="pass/fail, override the score">
+      <gate id="G1">Licence: root file with full text, deliberate choice, named holder, manifest agrees, assets compatible.</gate>
+      <gate id="G2">Secrets: none in tree or history; ignore rules cover environment and key material; examples hold placeholders.</gate>
+      <gate id="G3">Real function: the headline behaviour executes for real; nothing on the primary path is mocked, replayed or hard-coded.</gate>
+      <gate id="G4">Reproducibility: the documented path installs and runs clean, or is explicitly marked untested with the blocker named.</gate>
+      <gate id="G5">Honest claims: every material statement is true, current and traceable; no inflated or invented results.</gate>
+      <gate id="G6">Asset rights: every dataset, model, font, image and snippet has a source and licence; nothing non-redistributable is committed.</gate>
+    </gates>
+
+    <scoring>
+      Score each category 0-4 (0 absent, 1 token, 2 partial, 3 solid, 4 exemplary with re-runnable
+      evidence). Points = anchor / 4 * weight. Renormalise over applicable categories so a project
+      is never punished for lacking an API, a UI or a model.
+
+      Weights: purpose 5 · README 10 · organisation 4 · code quality 10 · git 7 · testing 12 ·
+      automation 8 · security 10 · licensing 6 · dependency and release 6 · documentation 5 ·
+      contributor experience 5 · domain rigour 8 · operational readiness 4.
+
+      ESS = applicable categories only, UNVERIFIED counted as 0.
+      AVS = exclude NA and UNVERIFIED, renormalise.
+      Verification debt = count and weight share of applicable items not demonstrated. Report it.
+
+      Bands: 85+ exemplary · 70-84 strong · 55-69 adequate · 40-54 weak · below 40 deficient.
+      A category supported only by the project's own docs caps at 2 until verified.
+    </scoring>
+
+    <comparative_baseline note="judge against the peer band for this archetype and maturity">
+      Time from clone to a real result: under 5 minutes for anything preview or stable, under 10
+      for prototype; any undocumented manual step is a red flag. Offline suite under 60 seconds.
+      CI under 10 minutes. Doc drift target 0. Unverified share target under 15 percent and falling.
+      Mock surface outside tests target 0. Known high-severity advisories target 0.
+    </comparative_baseline>
+  </step>
+
+  <step n="4" id="PRIORITIZE">
+    P0 release-blocking: failed gate, secret, licence blocker, broken core path, fabricated claim,
+    unsafe default. P1 trust and reproducibility: documented setup fails, checks unenforced, a
+    headline claim unverifiable, important failure path untested. P2 maintainability, automation,
+    documentation, contributor gaps. P3 polish.
+    Rank inside a class by leverage = (impact 1-5 x confidence 0.33|0.66|1.0) / effort 1-5.
+    Never promote cosmetics because they are easy; never demote a gate because it is hard.
+    A finding without an observed artifact is a hypothesis and does not outrank verified findings.
+  </step>
+
+  <step n="5" id="WHATIF">
+    A what-if is a conditional, costed opportunity, not a wish and not a restatement of a finding.
+    At most seven, ranked. Each must carry:
+    trigger (observed fact) · minimal version (smallest change that captures most of the value) ·
+    qualification gain (which gate or category moves, and why a reviewer notices) ·
+    operational gain (what becomes smoother, cheaper or less fragile) · cost · risk ·
+    measurement (the artifact or number that proves it) · abandon-if (when it is not worth doing).
+    Rules: no fact, no what-if. Prefer changes that remove dependence on the author's machine,
+    memory or presence. Prefer changes that turn a claim into an enforced check. Always include
+    one thing this project should not do.
+    Shape: "A single CI job that installs from the lockfile, lints and runs the offline suite would
+    turn an unenforced 40-second suite into a public record on every change; one file; risk is a
+    flaky job that trains people to ignore red."
+  </step>
+
+  <step n="6" id="ACT" condition="IMPROVE or RELEASE_PREP">
+    Small coherent units, one intent each, tests and docs with the behaviour they describe.
+    Run the checks the change could break and record real output. Preserve conventions; do not
+    refactor while fixing. Stop and ask one precise question when the right change cannot be
+    inferred safely. Never leave a documented command orphaned.
+  </step>
+
+  <step n="7" id="REPORT">
+    Order: verdict (READY, CONDITIONALLY READY, BLOCKED, with ESS/AVS, band, gate statuses, debt) ·
+    profile · gate table with evidence · findings table (problem, evidence, impact, priority, action,
+    verification, done-when) · scorecard · ranked what-ifs · strengths to preserve ·
+    what not to do · commands actually run with exit status and environment ·
+    unverified items with the precise blocker · owner-only actions · next three actions.
+    The reader must be able to act after the first ten lines.
+  </step>
+
+  <!-- ================= ARCHETYPE FLOORS ================= -->
+  <!-- must = floor for this kind; flagship = where comparative advantage is won; never = do not cargo-cult -->
+
+  <archetype_index>
+    <row id="LIBRARY_PACKAGE" must="licence README quickstart config-reference lockfile tests riskiest-behaviours CI secrets semver+tag" flagship="stable public surface with compatibility policy; runnable examples; generated API reference; deprecation path; runtime matrix matching the claim" never="deployment runbooks, health endpoints, UI accessibility, orchestration"/>
+    <row id="CLI_TOOL" must="quickstart flag-reference prerequisites preflight tests riskiest-behaviours CI secrets tag" flagship="stdout/stderr discipline; exit codes; golden-output tests; per-platform install; OS matrix only where claimed; dry-run for destructive paths" never="web UI scaffolding, migrations, service health checks"/>
+    <row id="SERVICE_API" must="server-side authz input validation least privilege config-reference deployment tests live-marker integration CI health metering caps" flagship="committed contract with staleness check; machine-readable errors; request identifiers; latency evidence; migration path" never="desktop launchers, offline data bundles, model evaluation"/>
+    <row id="WEB_APP" must="quickstart lockfile tests CI per-unit jobs secrets authz validation" flagship="one critical journey tested end to end; accessible states for keyboard, focus, contrast, empty, loading, error, narrow; production build in CI; no secrets in client bundles" never="model harnesses, dataset provenance, binary signing"/>
+    <row id="MONOREPO" must="layout map CI per-unit jobs lockfile commit hygiene" flagship="per-package manifests and tests; path-filtered jobs; explicit dependency direction; ownership; per-package versioning where published" never="a monorepo layout for two folders; shared tooling that is not shared"/>
+    <row id="AI_ML_APP" must="output validation model/code separation failure classes config-not-code live markers evaluation set provenance model terms zero-key demo data-flow disclosure" flagship="deterministic boundary; claim-to-evidence tracing; first-run evaluation retained; measured cost and latency; injection threat model" never="publishing numbers without a regenerating script; one transcript as evaluation"/>
+    <row id="DATA_PIPELINE" must="asset rights download-at-setup validation tests adversarial fixtures preflight metering caps data-flow" flagship="idempotent re-runs; schema evolution; data-quality thresholds; lineage and row counts; backfill procedure" never="frontend build gates, interactive UX audits, unused signing"/>
+    <row id="RESEARCH_SOFTWARE" must="lockfile prerequisites evaluation honesty asset rights data-flow seeds recorded credit" flagship="environment that reproduces the reported numbers; seeds and hardware recorded; notebooks cleared and logic in modules; limitations that name what the result does not show" never="release automation before the method is stable; community templates for a single author"/>
+    <row id="INFRA_DEVSECOPS" must="secrets least privilege threat model deployment doc preflight tests rollback" flagship="plan/apply separation with dry run; blast radius per command; least-privilege identities; authorised-use statement; demonstrated rollback" never="product UX polish, model evaluations, dataset licence tables"/>
+    <row id="SPEC_SCHEMA" must="licence reference doc versioning tests staleness check extension guide" flagship="normative versus informative split; conformance vectors; change process with version negotiation; reference validator" never="deployment runbooks, model evaluation, accessibility"/>
+    <row id="TEMPLATE_STARTER" must="README quickstart lockfile CI secrets extension guide maintenance status" flagship="generated project passes its own checks immediately; removal path for every included piece; honest statement of what it does not cover" never="deep domain evaluation, runbooks for infrastructure it does not own"/>
+    <row id="SYSTEMS_NATIVE" must="prerequisites tests adversarial fixtures benchmarks validation quickstart CI" flagship="sanitiser or fuzz on parsing boundaries; benchmark harness with variance and hardware; documented hardware floor with clear failure; resource-exhaustion behaviour" never="web UX audits, model provenance, firmware publishing rituals"/>
+  </archetype_index>
+
+  <!-- ================= HIGH-VALUE CANDIDATE UPGRADES ================= -->
+  <!-- Select only where the trigger matches; rewrite in this project's terms; never paste verbatim. -->
+
+  <whatif_seeds>
+    <seed trigger="tests exist but nothing runs them">single CI job: locked install, lint, offline tests. XS effort, highest leverage in most repositories.</seed>
+    <seed trigger="setup failures dominate support">preflight command that names the exact fix per missing prerequisite.</seed>
+    <seed trigger="cannot be seen without accounts or keys">bundled fixtures plus local provider so the primary path produces a real result offline; label mocks.</seed>
+    <seed trigger="numbers in docs maintained by hand">script that regenerates quoted counts and fails on mismatch.</seed>
+    <seed trigger="transitive dependencies float">commit the lockfile and install from it everywhere.</seed>
+    <seed trigger="no single proof the product is alive">smoke command on the primary path, under a minute, clear failure stage.</seed>
+    <seed trigger="interface described only in prose">export the contract, commit it, fail the build when stale.</seed>
+    <seed trigger="fixed defects recur">one regression test per fix, verified to fail when the fix is reverted.</seed>
+    <seed trigger="quality asserted from a demo">case file with expected outcomes written before the next change, first-run result retained.</seed>
+    <seed trigger="security or privacy claims in prose">numbered controls mapped to files or tests, plus the residual risk named.</seed>
+    <seed trigger="local-only promise">dependency audit rejecting telemetry libs, loopback-only bind test.</seed>
+    <seed trigger="cross-platform claim, one OS tested">matrix entries that match the support table, or correct the claim.</seed>
+    <seed trigger="no path for an outsider">one extension path documented step by step with file locations.</seed>
+    <seed trigger="reuse requires editing core">one interface at the boundary that actually varies, two implementations.</seed>
+    <seed trigger="users cannot tell what shipped">tag, matching changelog entry, stated support status.</seed>
+    <seed trigger="setup over five steps">single container or dev environment as an alternative, not a replacement.</seed>
+    <seed trigger="failures diagnosed by asking the author">structured logs with a request identifier and timings, secrets redacted.</seed>
+    <seed trigger="metered resources">timeouts, caps, smallest tier, warning threshold.</seed>
+    <seed trigger="no commits for a long period">status line and archive notice naming an alternative.</seed>
+    <do_not_propose>badges before a green run; a code of conduct with no community; templates before one outside issue; a plugin system, queue or service split to look architectural; coverage gates before meaningful tests; history rewrites for aesthetics; a second framework to look versatile; docs pages that repeat the README.</do_not_propose>
+  </whatif_seeds>
+
+  <!-- ================= SELF-CHECK ================= -->
+
+  <self_check>
+    <item>Did I profile before judging, and does every applied rule fit that profile?</item>
+    <item>Did I keep exists, configured, ran, passed and meaningful separate?</item>
+    <item>Is every finding backed by a path, command or run record?</item>
+    <item>Did I give a reason for every NA, and refuse NA to raise the score?</item>
+    <item>Is verification debt reported separately from the score?</item>
+    <item>Does every what-if cite a fact, name a minimal version, and carry a measurement and an abandon condition?</item>
+    <item>Did I list what to preserve and what not to do?</item>
+    <item>Is any unexecuted check described as passing? Did I reveal a secret? Did I add anything that solves no named problem?</item>
+  </self_check>
+
+  <module_context>
+    Profile: reuse .agents/profile.xml when it is filled, and verify it rather than trusting it.
+    Gates G1-G6 are judged here; the commit, task and release gates are run with
+    .agents/bin/precheck.sh (--staged, --final, --release) and their real output is quoted in the
+    report. Mode BOOTSTRAP is delivered by the PRESET stage of PROJECT.xml (skill project-setup).
+  </module_context>
+
+  <full_reference>
+    Read the companion full directive (DIRECTIVE.xml, one section at a time) for: the 92 domain rules (125 rules in all) (licence, documentation, reproducibility,
+    testing, automation, security, model-dependent systems, git, release, contributor experience,
+    operations, agent hygiene), the 20-item what-if catalog with cost and scoring effects, the seven
+    templates (README, agent instructions, CI, PR, security policy, evidence map, commit format),
+    the timeboxed release sequence, owner-only settings, anti-patterns and the glossary.
+  </full_reference>
+
+</oss_core>

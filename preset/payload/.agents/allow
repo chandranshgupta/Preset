@@ -1,0 +1,18 @@
+# Reviewed exceptions for .agents/bin/precheck.sh
+#
+# One glob per line. Format: <check>:<path>      (# starts a comment)
+#   artifact:dist/bundle.js       a tracked build output that is deliberate
+#   size:test/fixtures/big.bin    an intentionally large test fixture
+#   secret-soft:tests/*           credential-shaped test values that are known fakes
+#   licence:                      licence decision is known and accepted as absent
+#
+# Checks: artifact · env · size · secret · secret-soft · conflict · swallowed · debugger ·
+#         machine-path · gitignore · licence · lockfile · ci · readme · readme-quickstart ·
+#         constitution · agents-length · profile · memory · commands · command-<id> ·
+#         changelog · security-policy · tag
+#
+# Every exception is a permanent, visible decision. Prefer fixing the finding.
+
+# Vendored skill helpers (browser companion scripts) use empty catch blocks by design;
+# they are agent tooling, not application code.
+swallowed:.agents/skills/*
